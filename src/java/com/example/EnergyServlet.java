@@ -59,7 +59,10 @@ public class EnergyServlet extends HttpServlet {
                 first = false;
             }
             out.println("\n]");
-
+            // release memory back:
+            rs.close();   // we no longer need rows we were looping through
+            stmt.close(); // done with prepared statement (template of query)
+            conn.close(); // done with database close connection 
         } catch (Exception e) {
             out.println("{\"error\": \"" + e.getMessage() + "\"}");
         }
