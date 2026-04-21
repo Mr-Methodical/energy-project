@@ -1,4 +1,4 @@
-package com.example
+package com.example;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -29,8 +29,8 @@ public class EnergyServlet extends HttpServlet {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
             // using ? to prevent SQL injection attacks:
-            PreparedStatement stmt = conn.prepareStatement {
-                "SELECT year, renewables_electricity, fossil_electricity " +
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT year, renewables_electricity, fossil_electricity, " +
                 "nuclear_electricity " +
                 "FROM owid_energy " +
                 "WHERE country = ? AND year IS NOT NULL " +
@@ -38,7 +38,7 @@ public class EnergyServlet extends HttpServlet {
                 "AND nuclear_electricity IS NOT NULL " +
                 "AND fossil_electricity IS NOT NULL " +
                 "ORDER BY year ASC"
-            };
+                );
             stmt.setString(1, country);
             ResultSet rs = stmt.executeQuery();
 
@@ -49,11 +49,11 @@ public class EnergyServlet extends HttpServlet {
                 if (!first) out.println(",");
                 out.print("  {");
                 out.print("\"year\": " + rs.getInt("year") + ", ");
-                out.print("\"renewables\" +
+                out.print("\"renewables\": " +
                           rs.getDouble("renewables_electricity") + ", ");
-                out.print("\"fossil\" +
+                out.print("\"fossil\": " +
                           rs.getDouble("fossil_electricity") + ", ");
-                out.print("\"nuclear\" +
+                out.print("\"nuclear\": " +
                           rs.getDouble("nuclear_electricity"));
                 out.print("}");
                 first = false;
