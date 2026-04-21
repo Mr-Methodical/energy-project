@@ -15,13 +15,14 @@ exec curl -sL -o $filename $url
 puts "Download complete"
 
 puts "Connecting to database $dbName"
-tdbc::postgres::connection create db -user $dbUser -password $dbPass -db $dbName
+tdbc::postgres::connection create db \
+    -user $dbUser -password $dbPass -db $dbName -host localhost -port 5432
 puts "Connected!"
 
 # creating headers so it has all our columns
 puts "Reading CSV header"
 set fp [open $filename r]
-set headerLine [get $fp]
+set headerLine [gets $fp]
 set headers [::csv::split $headerLine]
 puts "Read"
 
@@ -37,7 +38,7 @@ puts "Creating table '$tableName' and dropping current one if needed"
 # catch in case there are permissions issues or something else unexpected
 catch { db allrows "DROP TABLE IF EXISTS $tableName" }
 # creating columns in db
-db allrows "CREATE TABLE $tablename ([join $colDefs {, }])"
+db allrows "CREATE TABLE $tableName ([join $colDefs {, }])"
 puts "Table created"
 
 set placeholders {}
