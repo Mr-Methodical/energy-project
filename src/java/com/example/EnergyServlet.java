@@ -35,8 +35,11 @@ public class EnergyServlet extends HttpServlet {
                 "FROM owid_energy " +
                 "WHERE country = ? AND year IS NOT NULL " +
                 "AND renewables_electricity IS NOT NULL " +
+                "AND renewables_electricity != '' " +
                 "AND nuclear_electricity IS NOT NULL " +
+                "AND nuclear_electricity != '' " +
                 "AND fossil_electricity IS NOT NULL " +
+                "AND fossil_electricity != '' " +
                 "ORDER BY year ASC"
                 );
             stmt.setString(1, country);
