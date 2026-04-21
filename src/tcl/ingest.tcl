@@ -40,5 +40,14 @@ catch { db allrows "DROP TABLE IF EXISTS $tableName" }
 db allrows "CREATE TABLE $tablename ([join $colDefs {, }])"
 puts "Table created"
 
+set placeholders {}
+for {set i 0} {$i < [llength $headers]} {incr i} {
+    lappend placeholders ":val$i"
+}
+set insertSQL "INSERT INTO $tableName VALUES ([join $placeholders {, }])"
+set stmt [db prepare $insertSQL]
+# now stmt is connection ot the prapresed insertSQL in the database
 
+puts "Inserting rows"
+db 
 
