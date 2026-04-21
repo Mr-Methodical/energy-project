@@ -32,3 +32,13 @@ foreach h $headers {
     lappend colDefs "\"$clean\" TEXT"
 }
 
+puts "Creating table '$tableName' and dropping current one if needed"
+# send message to db to drop rows if any exists
+# catch in case there are permissions issues or something else unexpected
+catch { db allrows "DROP TABLE IF EXISTS $tableName" }
+# creating columns in db
+db allrows "CREATE TABLE $tablename ([join $colDefs {, }])"
+puts "Table created"
+
+
+
