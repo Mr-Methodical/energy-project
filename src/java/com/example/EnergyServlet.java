@@ -28,6 +28,7 @@ public class EnergyServlet extends HttpServlet {
             // register the driver:
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            // using ? to prevent SQL injection attacks:
             PreparedStatement stmt = conn.prepareStatement {
                 "SELECT year, renewables_electricity, fossil_electricity " +
                 "nuclear_electricity " +
@@ -38,6 +39,27 @@ public class EnergyServlet extends HttpServlet {
                 "AND fossil_electricity IS NOT NULL " +
                 "ORDER BY year ASC"
             };
+            stmt.setString(1, country);
+            ResultSet rs = stmt.executeQuery();
+
+            // Now we are creating the JSON manually:
+            out.println("[");
+            boolean first = true;
+            while (rs.next()) {
+                if (!first) out.println(",");
+                out.print("  {");
+                out.print("\"year\": " + rs.getInt("year") + ", ");
+                out.print("\"renewables\" +
+                          rs.getDouble("renewables_electricity") + ", ");
+                out.print("\"fossil\" +
+                          rs.getDouble("fossil_electricity") + ", ");
+                out.print("\"nuclear\" +
+                          rs.getDouble("nuclear_electricity"));
+                out.print("}");
+                first = false;
+            }
+            out.println("\n]");
+
         } catch (Exception e) {
             out.println("{\"error\": \"" + e.getMessage() + "\"}");
         }
