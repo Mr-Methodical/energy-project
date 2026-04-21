@@ -78,4 +78,15 @@ while {[gets $fp line] >= 0} {
 }
 # save everything to disk
 db commit
+close $fp
+puts "Done!! Inserted $count rows into '$tableName'"
+
+# adding index on country and year because these will most likely be 
+# most common lookups
+puts "Adding index on country and year"
+db allrows "CREATE INDEX idx_country_year ON $tableName (\"country\", \"year\")"
+
+$stmt close
+db close
+puts "All done. Database is ready!"
 
