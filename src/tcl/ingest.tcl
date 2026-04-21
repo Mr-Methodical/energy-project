@@ -18,5 +18,17 @@ puts "Connecting to database $dbName"
 tdbc::postgres::connection create db -user $dbUser -password $dbPass -db $dbName
 puts "Connected!"
 
+# creating headers so it has all our columns
 puts "Reading CSV header"
+set fp [open $filename r]
+set headerLine [get $fp]
+set headers [::csv::split $headerLine]
+puts "Read"
+
+set colDefs {}
+foreach h $headers {
+    # any character not a letter, number, or underscore, we replace with underscore
+    set clean [regsub -all {[^a-zA-Z0-9_]} $h "_"]
+    lappend colDefs "\"$clean\" TEXT"
+}
 
