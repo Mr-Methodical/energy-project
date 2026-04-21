@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" version="6.0" metadata-complete="true">
+    <servlet>
+        <servlet-name>EnergyServlet</servlet-name>
+        <servlet-class>com.example.EnergyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyServlet</servlet-name>
+        <url-pattern>/energy</url-pattern>
+    </servlet-mapping>
+</web-app>
