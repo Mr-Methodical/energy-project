@@ -46,8 +46,36 @@ for {set i 0} {$i < [llength $headers]} {incr i} {
 }
 set insertSQL "INSERT INTO $tableName VALUES ([join $placeholders {, }])"
 set stmt [db prepare $insertSQL]
-# now stmt is connection ot the prapresed insertSQL in the database
+# now stmt is connection ot the prepresed insertSQL in the database
 
 puts "Inserting rows"
-db 
+# none saved to disk until I tell it to:
+db begintransaction
+set count 0
+while {[gets $fp line] >= 0} {
+    if {[string trim $line] eq ""} continue
+    set values [::csv::split $line]
+    # filling in missing fields with postgres NULL values {}
+    while {[llength $values] < [llength $headers]} {
+        lappend values {}
+    }
+    set rowDict [dict create]
+    for {set i 0} {$i < [llength $headers]} {incr i} {
+        # get value from specific index
+        set val [lindex $values $i]
+        # if a field is empty change it to the postgres NULL {}
+        if {$val eq ""} {
+            set val {}
+        }
+        dict set rowDict "val$i" $val
+    }
+    #inserts into database (doesn't write yet only when we commit)
+    $stmt execute $rowDict
+    incr count
+    if {$count % 5000 == 0} {
+        puts "inserted $count rows"
+    }
+}
+# save everything to disk
+db commit
 
