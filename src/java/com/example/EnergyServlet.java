@@ -25,7 +25,19 @@ public class EnergyServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-
+            // register the driver:
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            PreparedStatement stmt = conn.prepareStatement {
+                "SELECT year, renewables_electricity, fossil_electricity " +
+                "nuclear_electricity " +
+                "FROM owid_energy " +
+                "WHERE country = ? AND year IS NOT NULL " +
+                "AND renewables_electricity IS NOT NULL " +
+                "AND nuclear_electricity IS NOT NULL " +
+                "AND fossil_electricity IS NOT NULL " +
+                "ORDER BY year ASC"
+            };
         } catch (Exception e) {
             out.println("{\"error\": \"" + e.getMessage() + "\"}");
         }
