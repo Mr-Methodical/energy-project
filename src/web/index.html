@@ -154,6 +154,7 @@
     <div class="chart-container" style="margin-top: 30px;">
         <canvas id="compareChart" height="120"></canvas>
     </div>
+    <p id="compareStatus"></p>
     <script>
         let chart = null;
         let compareChart = null;
@@ -322,6 +323,9 @@
                 });
             }
                 
+        } catch(error) {
+            document.getElementById('compareStatus').textContent =
+                'Compare failed: ' + err.message;
         }
         // Load the default (US) so they see graph right away
         loadData();
