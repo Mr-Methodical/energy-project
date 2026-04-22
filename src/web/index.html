@@ -140,7 +140,17 @@
             <div class="value nuclear" id="nuclearShare">-</div>
         </div>
     </div>
-
+    <div class="controls" style="margin-top: 16px;">
+        <select id="typeSelect">
+            <option value="nuclear">Nuclear</option>
+            <option value="renewables">Renewables</option>
+            <option value="fossil">Fossil</option>
+        </select>
+        <input id="yearInput" type="number" value="2023" min="1985" max="2024"
+               style="width:90px; padding:10px; border-radius:8px; border:1px solid #333;
+                      background:#1e2130; color:#fff; font-size:1rem;">
+        <button onclick="loadCompare()">Compare Countries</button>
+    </div>
     <script>
         let chart = null
         async function loadData() {
@@ -218,7 +228,7 @@
                             }
                         ]
                     },
-                    options: {
+                    options: { 
                         responsive: true,
                         plugins: {
                             legend: { labels: {color: '#ccc'} },
