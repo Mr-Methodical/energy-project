@@ -96,4 +96,49 @@
             font-size: 0.9rem;
         }
     </style>
+</head>
+<body>
 
+    <h1>Global Energy Dashboard</h1>
+    <p class="subtitle">Electricity generation by source - data from Our World in Data</p>
+    <div class="controls">
+        <select id="countrySelect">
+            <option value="United States">United States</option>
+            <option value="Canada">Canada</option>
+            <option value="China">China</option>
+            <option value="Germany">Germany</option>
+            <option value="France">France</option>
+            <option value="India">India</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Brazil">Brazil</option>
+            <option value="Japan">Japan</option>
+            <option value="Australia">Australia</option>
+        </select>
+        <button onclick="loadData()">Load</button>
+    </div>
+
+    <p id="status">Loading</p>
+    <div class="chart-container">
+        <canvas id="energyChart" height="120"></canvas>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="label">Latest Renewables (TWh)</div>
+            <div class="value renewables" id="statRenewables">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Latest Fossil (TWh)</div>
+            <div class="value fossil" id="statFossil">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Latest Nuclear (TWh)</div>
+            <div class="value nuclear" id="statNuclear">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Renewables Growth</div>
+            <div class="value renewables" id="statGrowth">-</div>
+        </div>
+    </div>
+</body>
+</html>
