@@ -321,14 +321,14 @@
                         }
                     }
                 });
+            } catch(error) {
+                document.getElementById('compareStatus').textContent =
+                'Compare failed: ' + error.message;
             }
-                
-        } catch(error) {
-            document.getElementById('compareStatus').textContent =
-                'Compare failed: ' + err.message;
-        }
+        }   
         // Load the default (US) so they see graph right away
         loadData();
+        loadCompare();
     </script>
 </body>
 </html>
