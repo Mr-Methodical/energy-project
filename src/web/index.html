@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Energy Dashboard</title>
-    <script src="https://cdn.jsdelvr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -151,7 +151,7 @@
                 const response = await fetch(
                     `http://localhost:8080/energyapi/energy?country=${encodeURIComponent(country)}`
                 );
-                const data = await response.json;
+                const data = await response.json();
 
                 if (data.error) {
                     document.getElementById('status').textContent =
@@ -168,7 +168,7 @@
 
                 const last = data[data.length - 1];
                 const first = data[0];
-                document.getElementsById('statRenewables').textContent = 
+                document.getElementById('statRenewables').textContent = 
                     (last.renewables ?? 0).toFixed(1);
                 document.getElementById('statFossil').textContent = 
                     (last.fossil ?? 0).toFixed(1);
@@ -176,11 +176,15 @@
                     (last.nuclear ?? 0).toFixed(1);
                 const growth = (((last.renewables - first.renewables) / 
                                   first.renewables) * 100).toFixed(0);
-                document.getElementById('statGrowth') = `+${growth}%`;
+                document.getElementById('statGrowth').textContent =
+                    `+${growth}%`;
             } catch (error) {
                 document.getElementById('status').textContent =
-                    'Failed to fetch: ' + err.message;
+                    'Failed to fetch: ' + error.message;
             }
         }
+        // Load the default (US) so they see graph right away
+        loadData();
+    </script>
 </body>
 </html>
