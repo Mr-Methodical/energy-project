@@ -151,6 +151,9 @@
                       background:#1e2130; color:#fff; font-size:1rem;">
         <button onclick="loadCompare()">Compare Countries</button>
     </div>
+    <div class="chart-container" style="margin-top: 30px;">
+        <canvas id="compareChart" height="120"></canvas>
+    </div>
     <script>
         let chart = null
         async function loadData() {
@@ -256,6 +259,20 @@
                 document.getElementById('status').textContent =
                     'Failed to fetch: ' + error.message;
             }
+        }
+        async function loadCompare() {
+            const type = document.getElementById('typeSelect').value;
+            const year = document.getElementById('yearInput').value;
+
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/energyapi/compare?type=${type}&year=${year}`
+                );
+                const data = await response.json();
+                const labels = data.map(d => d.country);
+                const values = data.map(d => d.value);
+            }
+
         }
         // Load the default (US) so they see graph right away
         loadData();
