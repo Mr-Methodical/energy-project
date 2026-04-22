@@ -155,7 +155,8 @@
         <canvas id="compareChart" height="120"></canvas>
     </div>
     <script>
-        let chart = null
+        let chart = null;
+        let compareChart = null;
         async function loadData() {
             const country = document.getElementById('countrySelect').value;
             document.getElementById('status').textContent = 'Fetching data';
@@ -271,8 +272,56 @@
                 const data = await response.json();
                 const labels = data.map(d => d.country);
                 const values = data.map(d => d.value);
+                const colors = {
+                    nuclear:    'rgba(167,139,250,0.8)', // purple
+                    renewables: 'rgba(34,197,94,0.8)',   // green
+                    fossil:     'rgba(249,115,22,0.8)'   // orange
+                };
+                if (compareChart) compareChart.destroy();
+                const ctx = document.getElementById('compareChart').getContext('2d');
+                compareChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: `${type.charAt(0).toUpperCase() + 
+                                   type.slice(1)} Electricity ${year} (TWh)`,
+                            data: values,
+                            backgroundColor: colors[type],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { labels: { color: '#ccc' } },
+                            title: {
+                                display: true,
+                                text: `Country ${type.charAt(0).toUpperCase() +
+                                        type.slice(1)} Comparison -- ${year}`,
+                                color: '#fff',
+                                font: { size: 16 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#888' },
+                                grid: { display: false }
+                            },
+                            y: {
+                                ticks: { color: '#888' },
+                                grid: { color: '#2a2a3a' },
+                                title: { 
+                                    display: true, 
+                                    text: 'TWh', 
+                                    color: '#888' 
+                                }
+                            }
+                        }
+                    }
+                });
             }
-
+                
         }
         // Load the default (US) so they see graph right away
         loadData();
