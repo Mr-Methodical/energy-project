@@ -11,7 +11,7 @@ public class CompareServlet extends HttpServlet {
     private static final String DB_USER = "energyuser";
     private static final String DB_PASS = "energy123";
 
-    // These are the only 10 countries shown in our frontend dropdown
+    // These are the only 10 countries shown in our dropdown
     private static final String[] COUNTRIES = {
         "United States", "Canada", "China", "Germany", "France",
         "India", "United Kingdom", "Brazil", "Japan", "Australia"
@@ -27,6 +27,36 @@ public class CompareServlet extends HttpServlet {
 
         if (type == null || type.isEmpty()) type = "nuclear";
         if (year == null || year.isEmpty()) year = "2023";
+        
+        String column;
+        switch(type.toLowerCase()) {
+            case "renewables": column = "renewables_electricity"; break;
+            case "fossil": column = "fossil_electricity"; break;
+            case "nuclear": column = "nuclear_electricty"; break;
+            default:
+                response.getWriter().println("{\"error\": \"Invalid Type\"}");
+                return;
+        }
+        PrintWriter out = response.getWriter();
+        try {
+            // telling DriverManager that we want to use postgres driver
+            Class.forName("org.postgresql.Driver");
+            // Connects to posgres:
+            Connection conn =
+                DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            // sending SQL template for postgres to optimize:
+            // Note: putting column in which is safe as it can only be 
+            // 1 of 3 things we specified
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT country, " + column + " AS value" +
+                "FROM owid_energy " +
+                "WHERE country = ? AND year = ? " + 
+                "AND " + column + " IS NOT NULL " + 
+                "AND " + column + " != ''"
+            );
 
-
+        } catch (Exception e) {
+            out.println("{\"error\": \"" + e.getMessage() + "\"}");
+        }
     }
+}
