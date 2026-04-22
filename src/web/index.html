@@ -165,6 +165,18 @@
                 const renewables = data.map(d => d.renewables);
                 const fossil = data.map(d => d.fossil ?? 0);
                 const nuclear = data.map(d => d.nuclear ?? 0);
+
+                const last = data[data.length - 1];
+                const first = data[0];
+                document.getElementsById('statRenewables').textContent = 
+                    (last.renewables ?? 0).toFixed(1);
+                document.getElementById('statFossil').textContent = 
+                    (last.fossil ?? 0).toFixed(1);
+                document.getElementById('statNuclear').textContent =
+                    (last.nuclear ?? 0).toFixed(1);
+                const growth = (((last.renewables - first.renewables) / 
+                                  first.renewables) * 100).toFixed(0);
+                document.getElementById('statGrowth') = `+${growth}%`;
             } catch (error) {
                 document.getElementById('status').textContent =
                     'Failed to fetch: ' + err.message;
