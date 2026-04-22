@@ -136,8 +136,8 @@
             <div class="value nuclear" id="statNuclear">-</div>
         </div>
         <div class="stat-card">
-            <div class="label">Renewables Growth</div>
-            <div class="value renewables" id="statGrowth">-</div>
+            <div class="label">Nuclear Share</div>
+            <div class="value nuclear" id="nuclearShare">-</div>
         </div>
     </div>
 
@@ -174,10 +174,12 @@
                     (last.fossil ?? 0).toFixed(1);
                 document.getElementById('statNuclear').textContent =
                     (last.nuclear ?? 0).toFixed(1);
-                const growth = (((last.renewables - first.renewables) / 
-                                  first.renewables) * 100).toFixed(0);
-                document.getElementById('statGrowth').textContent =
-                    `+${growth}%`;
+                const totalLatest = last.renewables +
+                                    last.fossil + last.nuclear;
+                const nuclearShare = 
+                    ((last.nuclear / totalLatest) * 100).toFixed(2);
+                document.getElementById('nuclearShare').textContent =
+                    `${nuclearShare}%`;
 
                 if (chart) chart.destroy();
                 const ctx =
