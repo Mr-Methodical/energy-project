@@ -8,4 +8,12 @@
         <servlet-name>EnergyServlet</servlet-name>
         <url-pattern>/energy</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>CompareServlet</servlet-name>
+        <servlet-class>com.example.CompareServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompareServlet</servlet-name>
+        <url-pattern>/compare</url-pattern>
+    </servlet-mapping>
 </web-app>
