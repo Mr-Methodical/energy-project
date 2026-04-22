@@ -140,5 +140,35 @@
             <div class="value renewables" id="statGrowth">-</div>
         </div>
     </div>
+
+    <script>
+        let chart = null
+        async function loadData() {
+            const country = document.getElementById('countrySelect').value;
+            document.getElementById('status').textContent = 'Fetching data';
+            
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/energyapi/energy?country=${encodeURIComponent(country)}`
+                );
+                const data = await response.json;
+
+                if (data.error) {
+                    document.getElementById('status').textContent =
+                        'Error: ' + data.error;
+                    return;
+                }
+
+                document.getElementById('status').textContent = 
+                    `Showing ${data.length} years of data for ${country}`;
+                const labels = data.map(d => d.year ?? 0);
+                const renewables = data.map(d => d.renewables);
+                const fossil = data.map(d => d.fossil ?? 0);
+                const nuclear = data.map(d => d.nuclear ?? 0);
+            } catch (error) {
+                document.getElementById('status').textContent =
+                    'Failed to fetch: ' + err.message;
+            }
+        }
 </body>
 </html>
