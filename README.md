@@ -29,3 +29,19 @@ graph LR
     C -->|JSON| B
     B -->|HTTP Response| A
 ```
+
+## Design Pattern - MVC
+This project follows the **Model-View-Controller** pattern:
+| Layer | Role | In This Project |
+|---|---|---|
+| **Model** | Holds the data | PostgreSQL database (`owid_energy` table) |
+| **View** | What the user sees | `index.html` - Chart.js visualizations |
+| **Controller** | Handles requests, talks to the model | `EnergyServlet.java`, `CompareServlet.java` |
+
+The servlets act as the controllers since they receive HTTP requests from the frontend, query the database, and return JSON. Each layer has one job: index.html just for displaying json, servlets for getting data and giving json to 'view', and Postgres just in charge of requests of querying data when servlet requests it.
+
+## Future Improvements
+- **Automated Data Refresh**: I could add a cron job on Ubuntu that re-runs ingest.tcl once per year to pull the latest OWID data set automatically.
+- **Additional Datasets**: It would be interesting to see the relationship of a country's nuclear energy production to their exchange rate (see if there is any relationship there).
+- **Cloud Deployment**: I was thinking of using Oracle Cloud Free Tier for a permanent public URL (better for sharing and more tangible).
+
