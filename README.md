@@ -23,6 +23,9 @@ The frontend makes HTTP requests to two Java servlets running on Tomcat. The ser
 graph LR
     A[Browser] -->|HTTP GET| B[Tomcat 10]
     B -->|"calls doGet()"| C[Java Servlet]
-    C -->|JDBC| D[(PostgreSQL)]
+    C -->|JDBC query| D[(PostgreSQL)]
     E([OWID CSV Dataset]) -->|TCL Ingest Script| D
+    D -->|ResultSet| C
+    C -->|JSON| B
+    B -->|HTTP Response| A
 ```
