@@ -16,3 +16,13 @@ A TCL ingestion script downloads 23,000+ rows from [Our World in Data](https://g
 | Database Driver | PostgreSQL JDBC |
 | Data Ingestion | TCL 8.6 (TDBC) |
 | OS | Ubuntu 24.04 (Hyper-V VM) |
+
+## Architecture
+The frontend makes HTTP requests to two Java servlets running on Tomcat. The servlets query PostgreSQL using JDBC and return a JSON. The database was populated by a TCL script that downloaded 23,000+ rows from the OWID energy dataset.
+```mermaid
+graph LR
+    A[Browser] -->|HTTP GET| B[Tomcat 10]
+    B -->|"calls doGet()"| C[Java Servlet]
+    C -->|JDBC| D[(PostgreSQL)]
+    E([OWID CSV Dataset]) -->|TCL Ingest Script| D
+```
