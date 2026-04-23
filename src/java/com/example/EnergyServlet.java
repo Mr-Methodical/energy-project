@@ -11,7 +11,8 @@ public class EnergyServlet extends HttpServlet {
     private static final String DB_PASS = "energy123";
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
-        // Allow anything to access the API
+        // Allow anything to access the API (any website can hit API)
+        //   Just in case in the future if I move frontend somewhere else
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
