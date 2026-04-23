@@ -44,4 +44,47 @@ The servlets act as the controllers since they receive HTTP requests from the fr
 - **Automated Data Refresh**: I could add a cron job on Ubuntu that re-runs ingest.tcl once per year to pull the latest OWID data set automatically.
 - **Additional Datasets**: It would be interesting to see the relationship of a country's nuclear energy production to their exchange rate (see if there is any relationship there).
 - **Cloud Deployment**: I was thinking of using Oracle Cloud Free Tier for a permanent public URL (better for sharing and more tangible).
+---
+## API Endpoints
 
+### `Get /energyapi/energy`
+ 
+Returns a country's full energy history ordered by year.
+ 
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `country` | string | `Canada` | Country name |
+ 
+**Example request:**
+ 
+    GET /energyapi/energy?country=Japan
+ 
+**Example response:**
+ 
+    [
+      {"year": 2011, "renewables": 107.48, "fossil": 898.06, "nuclear": 156.18},
+      {"year": 2012, "renewables": 120.54, "fossil": 963.87, "nuclear": 17.24}
+    ]
+
+---
+ 
+### `GET /energyapi/compare`
+ 
+Returns a single energy type's value for all 10 countries in a given year.
+ 
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `type` | string | `nuclear` | `nuclear`, `renewables`, or `fossil` |
+| `year` | string | `2023` | Four digit year |
+ 
+**Example request:**
+ 
+    GET /energyapi/compare?type=nuclear&year=2023
+ 
+**Example response:**
+ 
+    [
+      {"country": "United States", "value": 774.87},
+      {"country": "France", "value": 338.20},
+      {"country": "China", "value": 434.72}
+    ]
