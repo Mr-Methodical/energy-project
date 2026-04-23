@@ -6,7 +6,7 @@ async function loadData() {
     
     try {
         const response = await fetch(
-            `http://localhost:8080/energyapi/energy?country=${encodeURIComponent(country)}`
+            `http://172.17.199.77:8080/energyapi/energy?country=${encodeURIComponent(country)}`
         );
         const data = await response.json();
 
@@ -110,7 +110,7 @@ async function loadCompare() {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/energyapi/compare?type=${type}&year=${year}`
+            `http://172.17.199.77:8080/energyapi/compare?type=${type}&year=${year}`
         );
         const data = await response.json();
         const labels = data.map(d => d.country);
