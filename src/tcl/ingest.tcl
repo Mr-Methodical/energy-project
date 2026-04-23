@@ -26,16 +26,18 @@ set headerLine [gets $fp]
 set headers [::csv::split $headerLine]
 puts "Read"
 
+# replace weird characters with underscores and wraps in quotes
+#   to prevent reserved-word collisions in Postgres
 set colDefs {}
 foreach h $headers {
-    # any character not a letter, number, or underscore, we replace with underscore
+    # any character not a letter, number, or underscore, replace with underscore
     set clean [regsub -all {[^a-zA-Z0-9_]} $h "_"]
     lappend colDefs "\"$clean\" TEXT"
 }
 
 puts "Creating table '$tableName' and dropping current one if needed"
-# send message to db to drop rows if any exists
-# catch in case there are permissions issues or something else unexpected
+# send message to db to drop rows if any exists catch in case there are
+#   permissions issues or something else unexpected
 catch { db allrows "DROP TABLE IF EXISTS $tableName" }
 # creating columns in db
 db allrows "CREATE TABLE $tableName ([join $colDefs {, }])"
@@ -47,10 +49,11 @@ for {set i 0} {$i < [llength $headers]} {incr i} {
 }
 set insertSQL "INSERT INTO $tableName VALUES ([join $placeholders {, }])"
 set stmt [db prepare $insertSQL]
-# now stmt is connection ot the prepresed insertSQL in the database
+# now stmt is connection to the preprocessed insertSQL in the database
 
 puts "Inserting rows"
-# none saved to disk until I tell it to:
+# none saved to disk until I tell it to (just says don't finalize yet):
+#   All or nothing: we won't put half empty data into postgres
 db begintransaction
 set count 0
 while {[gets $fp line] >= 0} {
@@ -83,7 +86,7 @@ close $fp
 puts "Done!! Inserted $count rows into '$tableName'"
 
 # adding index on country and year because these will most likely be 
-# most common lookups
+#   most common lookups (as this is how java servlets query)
 puts "Adding index on country and year"
 db allrows "CREATE INDEX idx_country_year ON $tableName (\"country\", \"year\")"
 
