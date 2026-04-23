@@ -6,6 +6,9 @@ A **Bar Chart** compares all 10 countries side-by-side for any energy type and y
 
 A TCL ingestion script downloads 23,000+ rows from [Our World in Data](https://github.com/owid/energy-data/) into PostgreSQL. Two Java servlets running on Apache Tomcat 10 expose a JSON API that a JavaScript frontend queries to render live Chart.js visualizations all running on Ubuntu 24.04.
 
+## Image:
+<img width="1855" height="1006" alt="image" src="https://github.com/user-attachments/assets/ad76e71d-ed66-4fb5-933f-81c3f726d8df" />
+
 ## Tech Stack
 | Layer | Technology |
 |---|---|
